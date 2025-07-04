@@ -1,27 +1,35 @@
 <?php
 
+namespace App\Livewire\Admin;
+
+use Livewire\Component;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
-use Livewire\Volt\Component;
 
-new #[Layout('components.layouts.auth')] class extends Component {
+class ResetPassword extends Component
+{
     #[Locked]
     public string $token = '';
-    public string $email = '';
+    public string $email = 'faisal@howauth.com';
     public string $password = '';
     public string $password_confirmation = '';
 
-    /**
+    public function render()
+    {
+        return view('livewire.admin.reset-password');
+    }
+
+        /**
      * Mount the component.
      */
     public function mount(string $token): void
-    {
+    {   
+        
         $this->token = $token;
 
         $this->email = request()->string('email');
@@ -35,9 +43,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $this->validate([
             'token' => ['required'],
             'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'string', 'confirmed'],
         ]);
-
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
@@ -45,7 +52,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         // موجودا في قاعدة البيانات ونقوم بتحديث كلمة المرور
         // ونقوم بحدث الحدث
         //
-        $status = Password::reset(
+        $status = Password::broker('admins')->reset(
             $this->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) {
                 $user->forceFill([
@@ -70,50 +77,4 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $this->redirectRoute('login', navigate: true);
     }
-}; ?>
-
-<div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Reset password')" :description="__('Please enter your new password below')" />
-
-    <!-- Session Status -->
-    <x-auth-session-status class="text-center" :status="session('status')" />
-
-    <form wire:submit="resetPassword" class="flex flex-col gap-6">
-        <!-- Email Address -->
-        <flux:input
-            wire:model="email"
-            :label="__('Email')"
-            type="email"
-            required
-            autocomplete="email"
-        />
-
-        <!-- Password -->
-        <flux:input
-            wire:model="password"
-            :label="__('Password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            :placeholder="__('Password')"
-            viewable
-        />
-
-        <!-- Confirm Password -->
-        <flux:input
-            wire:model="password_confirmation"
-            :label="__('Confirm password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            :placeholder="__('Confirm password')"
-            viewable
-        />
-
-        <div class="flex items-center justify-end">
-            <flux:button type="submit" variant="primary" class="w-full">
-                {{ __('Reset password') }}
-            </flux:button>
-        </div>
-    </form>
-</div>
+}

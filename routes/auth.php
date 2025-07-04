@@ -18,6 +18,7 @@ Route::middleware('guest')->group(function () {
         ->name('password.reset');
 });
 
+
 Route::middleware('auth')->group(function () {
     Volt::route('verify-email', 'auth.verify-email')
         ->name('verification.notice');
@@ -42,7 +43,13 @@ Route::prefix('admin')->group(function () {
 
     Route::view('register', 'admin.register')
         ->name('admin.register');
-        
+
+    Route::view('forgot-password', 'admin.forgot-password')
+        ->name('admin.password.request');
+
+    Route::view('reset-password/{token}', 'admin.reset-password')
+        ->name('admin.password.reset');
+
     Route::view('dashboard', 'admin.dashboard')
         ->middleware(['auth:admin'])
         ->name('admin.dashboard');

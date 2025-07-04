@@ -1,8 +1,6 @@
 @extends('layouts.auth_gate')
 
 @section('content')
-{{-- this  --}}
-    <livewire:admin.login />
-
+    <livewire:admin.forgot-password />
 @endsection
 
