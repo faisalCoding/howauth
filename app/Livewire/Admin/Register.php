@@ -30,15 +30,16 @@ class Register extends Component
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . Admin::class],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'string', 'confirmed', Rules\Password::min(8)->mixedCase()],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
 
         event(new Registered(($admin = Admin::create($validated))));
 
-        Auth::login($admin);
+        Auth::guard('admin')->login($admin);
 
-        $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
+        $this->redirectIntended(route('admin.verification.notice', absolute: false), navigate: true);
+
     }
 }

@@ -14,7 +14,7 @@ class AdminPasswordResetNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(public $token)
+    public function __construct(public $token, public $email)
     {
         //
     }
@@ -36,7 +36,7 @@ class AdminPasswordResetNotification extends Notification
     {
         return (new MailMessage)
             ->line('Hello, admin you are receiving this email because we received a password reset request for your account.')
-            ->action('Reset Password', url('admin/reset-password', $this->token))
+            ->action('Reset Password', url('admin/reset-password', ["token"=>$this->token , "email"=>$this->email]))
             ->line('Thank you for using our application!');
     }
 

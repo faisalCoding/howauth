@@ -8,15 +8,13 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] class extends Component {
 
-    #[Validate('required|string|email')]
+
     public string $email = '';
 
-    #[Validate('required|string')]
     public string $password = '';
 
     public bool $remember = false;
@@ -26,7 +24,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
      */
     public function login(): void
     {
-        $this->validate();
+        $this->validate([
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string', \Illuminate\Validation\Rules\Password::min(8)->mixedCase()],
+        ]);
 
         $this->ensureIsNotRateLimited();
 

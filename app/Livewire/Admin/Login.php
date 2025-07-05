@@ -8,17 +8,15 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\Validate;
+use Illuminate\Validation\Rules;
+
 use Livewire\Component;
 
 class Login extends Component
 {
 
-
-    #[Validate('required|string|email')]
     public string $email = '';
 
-    #[Validate('required|string')]
     public string $password = '';
 
     public bool $remember = false;
@@ -28,7 +26,12 @@ class Login extends Component
      */
     public function login(): void
     {
-        $this->validate();
+        $this->validate(
+            [
+                'email' => ['required', 'string', 'email'],
+                'password' => ['required', 'string', Rules\Password::min(8)->mixedCase()],
+            ]
+        );
 
         $this->ensureIsNotRateLimited();
 

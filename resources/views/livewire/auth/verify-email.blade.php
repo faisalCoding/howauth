@@ -10,8 +10,15 @@ new #[Layout('components.layouts.auth')] class extends Component {
     /**
      * Send an email verification notification to the user.
      */
+
+    public function __construct()
+    {
+
+    }
     public function sendVerification(): void
     {
+
+
         if (Auth::user()->hasVerifiedEmail()) {
             $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
 
@@ -32,7 +39,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $this->redirect('/', navigate: true);
     }
-}; ?>
+};?>
 
 <div class="mt-4 flex flex-col gap-6">
     <flux:text class="text-center">

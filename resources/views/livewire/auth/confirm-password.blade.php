@@ -14,7 +14,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public function confirmPassword(): void
     {
         $this->validate([
-            'password' => ['required', 'string'],
+            'password' => ['required', 'string', Rules\Password::min(8)->mixedCase()],
         ]);
 
         if (! Auth::guard('web')->validate([

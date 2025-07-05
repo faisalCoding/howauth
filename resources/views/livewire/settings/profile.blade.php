@@ -78,7 +78,14 @@ new class extends Component {
 
             <div>
                 <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
-
+                @if(auth()->user()->email_verified_at)
+                <div class="flex items-center gap-2 mt-2">
+                    <flux:icon icon="check" variant="micro" class="text-green-600" />
+                    <flux:text class="text-green-600">
+                        {{ __('Your email address is verified.') }}
+                    </flux:text>
+                </div>
+                @endif
                 @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail &&! auth()->user()->hasVerifiedEmail())
                     <div>
                         <flux:text class="mt-4">

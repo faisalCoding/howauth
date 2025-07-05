@@ -27,12 +27,12 @@ class ResetPassword extends Component
         /**
      * Mount the component.
      */
-    public function mount(string $token): void
+    public function mount(string $token , string $email): void
     {   
         
         $this->token = $token;
 
-        $this->email = request()->string('email');
+        $this->email = $email;
     }
 
     /**
@@ -43,7 +43,7 @@ class ResetPassword extends Component
         $this->validate([
             'token' => ['required'],
             'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string', 'confirmed'],
+            'password' => ['required', 'string', 'confirmed', Rules\Password::min(8)->mixedCase()],
         ]);
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
@@ -75,6 +75,6 @@ class ResetPassword extends Component
 
         Session::flash('status', __($status));
 
-        $this->redirectRoute('login', navigate: true);
+        $this->redirectRoute('admin.login', navigate: true);
     }
 }

@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-6 w-full max-w-md mx-auto top-1/2 transform  translate-y-1/2">
+<div class="flex flex-col gap-6 w-full max-w-md mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 transform  -translate-y-1/2">
     <x-auth-header :title="__('Reset Admin account password')" :description="__('Please enter your new password below')" />
 
     <!-- Session Status -->

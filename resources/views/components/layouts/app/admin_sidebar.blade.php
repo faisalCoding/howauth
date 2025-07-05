@@ -32,13 +32,15 @@
                 target="_blank">
                 {{ __('Repository') }}
             </flux:navlist.item>
-
+            
             <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire"
                 target="_blank">
                 {{ __('Documentation') }}
             </flux:navlist.item>
         </flux:navlist>
-
+        @if (!auth()->user()->email_verified_at)
+            <a href="{{ route('admin.verification.notice') }}" class="text-sm text-center text-red-700 bg-red-900/25 rounded-full p-2">your email is {{ auth()->user()->email_verified_at ? 'Verified' : 'Not Verified' }}</a>
+        @endif
         <!-- Desktop User Menu -->
         <flux:dropdown class="hidden lg:block" position="bottom" align="start">
             <flux:profile :name="auth()-> user()-> name" :initials="auth()-> user()-> initials()"
